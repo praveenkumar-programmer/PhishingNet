@@ -125,7 +125,6 @@ public class FloatingWindowService extends Service {
         repository.getFloatingWindowServiceOnOffSetting().observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-
                 if(aBoolean == null) return;
 
                 if(isMainServiceOn && aBoolean)
