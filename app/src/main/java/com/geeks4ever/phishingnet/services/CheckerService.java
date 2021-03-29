@@ -48,7 +48,6 @@ public class CheckerService extends Service {
 
         repository = CommonRepository.getInstance(getApplication());
         queue = Volley.newRequestQueue(this);
-        startService(new Intent(getBaseContext(), FloatingWindowService.class));
         if (queue == null)
             queue = Volley.newRequestQueue(this);
 
