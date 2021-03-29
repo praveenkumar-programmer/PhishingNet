@@ -43,14 +43,17 @@ public class MyAccessibilityService extends AccessibilityService {
         repository.getFloatingWindowServiceOnOffSetting().observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                isFloatingWindowOn = aBoolean;
+                //null check
+                if (aBoolean != null) {
+                    isFloatingWindowOn = aBoolean;
+                }
             }
         });
 
         repository.getCurrentUrl().observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                if(strings == null || strings.isEmpty())
+                if (strings == null || strings.isEmpty())
                     currentURL = "";
                 else
                     currentURL = strings.get(0);
@@ -62,14 +65,14 @@ public class MyAccessibilityService extends AccessibilityService {
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
 
-        if( !isOn)
+        if (!isOn)
             return;
 
         AccessibilityNodeInfo source = accessibilityEvent.getSource();
         if (source == null)
             return;
 
-        if(AppList.contains(String.valueOf(source.getPackageName()))){
+        if (AppList.contains(String.valueOf(source.getPackageName()))) {
 
             if (source.getText() != null && source.getText().length() > 0) {
 
@@ -96,7 +99,6 @@ public class MyAccessibilityService extends AccessibilityService {
         }
 
     }
-
 
 
     @Override
