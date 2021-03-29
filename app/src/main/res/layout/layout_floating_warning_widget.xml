@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:animateLayoutChanges="true"
+    android:theme="@style/Theme.PhishingNet">
+
+    <FrameLayout
+        android:id="@+id/floating_warning_window"
+        android:layout_width="340dp"
+        android:layout_height="550dp"
+        android:layout_gravity="center">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:layout_margin="20dp"
+            android:elevation="10dp"
+            android:background="@drawable/rounf_bg"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingStart="20dp"
+                android:paddingEnd="10dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/logo"/>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="17dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="15dp"
+                    android:src="@drawable/logo_text"/>
+
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:src="@drawable/warning_sign"
+                android:layout_marginTop="30dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Phising Site Detected!"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/warning_page_url_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/warning_red"
+                android:text="www.google.com/register_your_site_now.html"
+                android:layout_marginTop="10dp"/>
+
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/warning_page_close_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="close"
+                app:cornerRadius="20dp"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
+                android:layout_gravity="bottom|center"/>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</FrameLayout>

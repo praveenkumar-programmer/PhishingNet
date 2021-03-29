@@ -1,0 +1,16 @@
+<!--
+  ~ /**
+  ~  * Created by Harish on 3/24/21 2:07 PM
+  ~  * Copyright (c) 2021 . All rights reserved.
+  ~  * Last modified 3/23/21 11:22 AM
+  ~  */
+  -->
+
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid
+        android:color="@color/bg">
+    </solid>
+    <corners android:radius="20dp">
+    </corners>
+</shape>

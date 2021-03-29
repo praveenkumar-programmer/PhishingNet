@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".view.HomePage">
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:src="@drawable/logo"
+        android:layout_gravity="center_horizontal"/>
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.31"
+        android:layout_gravity="center"
+        android:src="@drawable/logo_text"/>
+
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:id="@+id/home_page_image"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:src="@drawable/on_icon"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/home_page_status_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="YOU ARE PROTECTED"
+        android:textSize="20sp"
+        android:layout_marginTop="30dp"
+        android:textStyle="bold"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/home_page_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="enable"
+        android:paddingStart="60dp"
+        android:paddingEnd="60dp"
+        app:cornerRadius="40dp"
+        android:layout_marginBottom="30dp"
+        android:paddingBottom="15dp"
+        android:elevation="10dp"
+        android:paddingTop="15dp"
+        android:textSize="17sp"
+        android:layout_gravity="center"/>
+
+
+</LinearLayout>
