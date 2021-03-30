@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">PhishingNet</string>
     <string name="accessibility_description">Gets HTTP Links and URLS from apps</string>
+    <string name="overlay_permission_request_description">This app needs overlay permission to show RealTime monitoring window on top of other apps and also to show warning window if a malicious site is detected.</string>
+    <string name="accessibility_permission_request_description">This app needs accessibility permission to monitor URLs.</string>
+
 </resources>

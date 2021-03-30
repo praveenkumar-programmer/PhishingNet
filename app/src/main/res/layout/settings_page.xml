@@ -18,7 +18,7 @@
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:src="@drawable/night_mode_icon"
-            app:tint="@color/teal_500" />
+            app:tint="@color/indigo_500" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -91,7 +91,7 @@
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:src="@drawable/apps_icon"
-            app:tint="@color/teal_500" />
+            app:tint="@color/indigo_500" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -133,7 +133,7 @@
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:src="@drawable/log_icon"
-            app:tint="@color/teal_500" />
+            app:tint="@color/indigo_500" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -174,7 +174,7 @@
             android:layout_height="35dp"
             android:layout_gravity="center"
             android:src="@drawable/about_us_icon"
-            app:tint="@color/teal_500" />
+            app:tint="@color/indigo_500" />
 
         <LinearLayout
             android:layout_width="wrap_content"

@@ -18,7 +18,7 @@
             android:padding="10dp"
             android:layout_margin="20dp"
             android:elevation="10dp"
-            android:background="@drawable/rounf_bg"
+            android:background="@drawable/round_corner_bg"
             android:orientation="vertical">
 
 

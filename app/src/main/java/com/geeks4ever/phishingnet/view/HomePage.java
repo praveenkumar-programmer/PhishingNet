@@ -1,24 +1,16 @@
 package com.geeks4ever.phishingnet.view;
 
-import android.Manifest;
-import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.AccessibilityServiceInfo;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ServiceInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
@@ -27,16 +19,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.geeks4ever.phishingnet.R;
 import com.geeks4ever.phishingnet.services.FloatingWindowService;
-import com.geeks4ever.phishingnet.services.MyAccessibilityService;
 import com.geeks4ever.phishingnet.viewmodel.commonViewModel;
 import com.google.android.material.button.MaterialButton;
-import com.karumi.dexter.Dexter;
-import com.karumi.dexter.MultiplePermissionsReport;
-import com.karumi.dexter.PermissionToken;
-import com.karumi.dexter.listener.PermissionRequest;
-import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
-
-import java.util.List;
 
 public class HomePage extends AppCompatActivity {
 
@@ -57,7 +41,6 @@ public class HomePage extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this, new ViewModelProvider
                 .AndroidViewModelFactory(  getApplication()  )).get(commonViewModel.class);
-
 
         getPermissions();
 
@@ -104,108 +87,53 @@ public class HomePage extends AppCompatActivity {
 
     }
 
-    public static boolean isAccessibilityServiceEnabled(Context context, Class<? extends AccessibilityService> service) {
-        AccessibilityManager am = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
-        List<AccessibilityServiceInfo> enabledServices = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK);
-
-        for (AccessibilityServiceInfo enabledService : enabledServices) {
-            ServiceInfo enabledServiceInfo = enabledService.getResolveInfo().serviceInfo;
-            if (enabledServiceInfo.packageName.equals(context.getPackageName()) && enabledServiceInfo.name.equals(service.getName()))
-                return true;
+    public boolean isAccessibilityEnabled() {
+        int accessibilityEnabled = 0;
+        final String ACCESSIBILITY_SERVICE_NAME = "com.geeks4ever.phishingnet/com.geeks4ever.phishingnet.services.MyAccessibilityService";
+        boolean accessibilityFound = false;
+        try {
+            accessibilityEnabled = Settings.Secure.getInt(this.getContentResolver(),android.provider.Settings.Secure.ACCESSIBILITY_ENABLED);
+            Log.d("LOGTAG", "ACCESSIBILITY: " + accessibilityEnabled);
+        } catch (Settings.SettingNotFoundException e) {
+            Log.d("LOGTAG", "Error finding setting, default accessibility to not found: " + e.getMessage());
         }
 
-        return false;
-    }
+        TextUtils.SimpleStringSplitter mStringColonSplitter = new TextUtils.SimpleStringSplitter(':');
 
+        if (accessibilityEnabled==1) {
+            Log.d("LOGTAG", "***ACCESSIBILIY IS ENABLED***: ");
+
+            String settingValue = Settings.Secure.getString(getContentResolver(), Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES);
+            Log.d("LOGTAG", "Setting: " + settingValue);
+            if (settingValue != null) {
+                TextUtils.SimpleStringSplitter splitter = mStringColonSplitter;
+                splitter.setString(settingValue);
+                while (splitter.hasNext()) {
+                    String accessabilityService = splitter.next();
+                    Log.d("LOGTAG", "Setting: " + accessabilityService);
+                    if (accessabilityService.equalsIgnoreCase(ACCESSIBILITY_SERVICE_NAME)){
+                        Log.d("LOGTAG", "We've found the correct setting - accessibility is switched on!");
+                        return true;
+                    }
+                }
+            }
+
+            Log.d("LOGTAG", "***END***");
+        }
+        else {
+            Log.d("LOGTAG", "***ACCESSIBILIY IS DISABLED***");
+        }
+        return accessibilityFound;
+    }
 
     private void getPermissions() {
 
-
-        if(!isAccessibilityServiceEnabled(this, MyAccessibilityService.class)) {
+        if(!isAccessibilityEnabled()  || !(Settings.canDrawOverlays(this))) {
             viewModel.toggleMainServiceOnOffSetting(false);
             Intent intent = new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            startActivityForResult(intent, 0);
+            startActivity(new Intent(this, PermissionPage.class));
         }
 
-        if( !(Settings.canDrawOverlays(this)))
-            Dexter.withContext(this)
-                .withPermissions(
-                        Manifest.permission.SYSTEM_ALERT_WINDOW)
-                .withListener(new MultiplePermissionsListener() {
-                    @Override
-                    public void onPermissionsChecked(MultiplePermissionsReport report) {
-                        // check if all permissions are granted
-                        if (report.areAllPermissionsGranted()) {
-                            // do you work now
-                        }
-//                        else{
-//                            tryAgain();
-//                        }
-
-                        // check for permanent denial of any permission
-                        if (report.isAnyPermissionPermanentlyDenied()) {
-                            showSettingsDialog();
-                        }
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(List<PermissionRequest> permissions, PermissionToken token) {
-                        token.continuePermissionRequest();
-                    }
-                })
-                .onSameThread()
-                .check();
-    }
-
-    private void tryAgain() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Need Permissions");
-        builder.setMessage("This app needs OVERLAY permissions to work.");
-        builder.setPositiveButton("TRY AGAIN", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                getPermissions();
-            }
-        });
-        builder.setNegativeButton("CLOSE APP", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                finish();
-            }
-        });
-        builder.show();
-    }
-
-    private void showSettingsDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Need Permissions");
-        builder.setMessage("This app needs OVERLAY permissions to work. You can grant them in app settings.");
-        builder.setPositiveButton("GOTO SETTINGS", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                openSettings();
-            }
-        });
-        builder.setNegativeButton("CLOSE APP", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-                finish();
-            }
-        });
-        builder.show();
-
-    }
-
-
-    // navigating user to app settings
-    private void openSettings() {
-        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-        Uri uri = Uri.fromParts("package", getPackageName(), null);
-        intent.setData(uri);
-        startActivityForResult(intent, 101);
     }
 
 
@@ -222,6 +150,7 @@ public class HomePage extends AppCompatActivity {
         if (id == R.id.settingsButton) {
             startActivity(new Intent(this, SettingsPage.class));
         }
+
         return super.onOptionsItemSelected(item);
     }
 

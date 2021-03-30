@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/appNameIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:src="@drawable/logo"
+        android:text="Welcome to Phishing Net"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appNameIcon" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/overlay_permission_number"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"
+        android:background="@drawable/round_bg"
+        android:textColor="@color/day_white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        android:text="1"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/overlay_permission_heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Overlay Permission"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/overlay_permission_number"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/overlay_permission_description"
+        android:layout_width="0dp"
+        android:text="@string/overlay_permission_request_description"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:cornerRadius="8dp"
+        app:layout_constraintStart_toEndOf="@id/overlay_permission_number"
+        app:layout_constraintTop_toBottomOf="@id/overlay_permission_heading"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/overlay_permission_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="10dp"
+        app:icon="@drawable/overlay_icon"
+        app:iconTint="@color/indigo_500"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:layout_constraintTop_toBottomOf="@id/overlay_permission_description"
+        app:layout_constraintStart_toStartOf="@id/overlay_permission_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Grand Permission"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/accessibility_permission_number"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="30dp"
+        android:background="@drawable/round_bg"
+        android:textColor="@color/day_white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/overlay_permission_button"
+        android:text="2"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/accessibility_permission_heading"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Accessibility Permission"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:layout_margin="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/accessibility_permission_number"
+        app:layout_constraintTop_toBottomOf="@id/overlay_permission_button" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/accessibility_permission_description"
+        android:layout_width="0dp"
+        android:text="@string/accessibility_permission_request_description"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/accessibility_permission_number"
+        app:layout_constraintTop_toBottomOf="@id/accessibility_permission_heading"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/accessibility_permission_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="10dp"
+        app:icon="@drawable/accessibility_icon"
+        app:iconTint="@color/indigo_500"
+        app:cornerRadius="8dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        app:layout_constraintTop_toBottomOf="@id/accessibility_permission_description"
+        app:layout_constraintStart_toStartOf="@id/accessibility_permission_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Grand Permission"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/finish"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:paddingVertical="12dp"
+        android:text="Let's go"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
