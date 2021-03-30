@@ -46,6 +46,8 @@ public class CheckerService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        Log.e("checker service", "s");
+
         repository = CommonRepository.getInstance(getApplication());
         queue = Volley.newRequestQueue(this);
         if (queue == null)
@@ -54,8 +56,7 @@ public class CheckerService extends Service {
         repository.getCurrentUrl().observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-//                if(!strings.isEmpty())
-//                    checkURL(strings.get(0));
+                checkURL(strings.get(0));
             }
         });
 
@@ -70,6 +71,8 @@ public class CheckerService extends Service {
 
 
     private void checkURL(String s) {
+
+        Log.e("inside checker service", s);
 
         if (s.contains("instagram")) {
             s = instagramURLDecoder(s);
@@ -158,14 +161,15 @@ public class CheckerService extends Service {
                                     if (Result == 1) {
                                         repository.addURL(new URLmodel(URLmodel.BAD_URL, urlToCheck));
                                     }
+                                    else
+                                        repository.addURL(new URLmodel(URLmodel.GOOD_URL, urlToCheck));
+
                                 } catch (JSONException jsx) {
                                     Log.e(TAG, jsx.toString());
                                 }
 
                                 //showFloatingWindow();
                             }
-                            else
-                                repository.addURL(new URLmodel(URLmodel.GOOD_URL, urlToCheck));
                         }
                     },
                     new Response.ErrorListener() {

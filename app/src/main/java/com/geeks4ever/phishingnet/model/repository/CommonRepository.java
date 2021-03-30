@@ -1,11 +1,12 @@
 package com.geeks4ever.phishingnet.model.repository;
 
 import android.app.Application;
-import android.content.Context;
 import android.os.AsyncTask;
 
 import androidx.collection.CircularArray;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import com.geeks4ever.phishingnet.model.AppListDBModel;
 import com.geeks4ever.phishingnet.model.CurrentURLDBModel;
@@ -19,26 +20,65 @@ public class CommonRepository {
 
     private static CommonRepository repository;
 
-    private CommonDAO commonDAO;
-    private LiveData<List<URLDBModel>> URLList;
-    private LiveData<List<String>> AppList;
-    private LiveData<List<String>> currentUrl;
-    private LiveData<Boolean> mainServiceOnOffSetting;
-    private LiveData<Boolean> FloatingWindowServiceOnOffSetting;
-    private LiveData<Boolean> darkMode;
-
-    private Context context;
+    private final CommonDAO commonDAO;
+    private final MutableLiveData<List<URLDBModel>> URLList = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> AppList = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> currentUrl = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> mainServiceOnOffSetting = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> FloatingWindowServiceOnOffSetting = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> darkMode = new MutableLiveData<>();
 
     private CommonRepository(Application application){
 
-        context = application;
         commonDAO = CommonDatabase.getInstance(application).commonDAO();
-        URLList = commonDAO.getURLList();
-        AppList = commonDAO.getAppList();
-        currentUrl = commonDAO.getCurrentUrl();
-        mainServiceOnOffSetting = commonDAO.getSetting("mainService");
-        FloatingWindowServiceOnOffSetting = commonDAO.getSetting("floatingWindowService");
-        darkMode = commonDAO.getSetting("nightMode");
+
+        commonDAO.getURLList().observeForever(new Observer<List<URLDBModel>>() {
+            @Override
+            public void onChanged(List<URLDBModel> urldbModels) {
+                if(urldbModels != null && !urldbModels.isEmpty())
+                    URLList.setValue(urldbModels);
+            }
+        });
+
+        commonDAO.getAppList().observeForever(new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> strings) {
+                if(strings != null && !strings.isEmpty())
+                    AppList.setValue(strings);
+            }
+        });
+
+        commonDAO.getCurrentUrl().observeForever(new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> strings) {
+                if(strings != null && !strings.isEmpty())
+                    currentUrl.setValue(strings);
+            }
+        });
+
+        commonDAO.getSetting("mainService").observeForever(new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean != null)
+                    mainServiceOnOffSetting.setValue(aBoolean);
+            }
+        });
+
+        commonDAO.getSetting("floatingWindowService").observeForever(new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean != null)
+                    FloatingWindowServiceOnOffSetting.setValue(aBoolean);
+            }
+        });
+
+        commonDAO.getSetting("nightMode").observeForever(new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                if(aBoolean != null)
+                    darkMode.setValue(aBoolean);
+            }
+        });
 
     }
 

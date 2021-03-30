@@ -154,5 +154,15 @@ public class HomePage extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        getPermissions();
+        super.onResume();
+    }
 
+    @Override
+    protected void onRestart() {
+        getPermissions();
+        super.onRestart();
+    }
 }

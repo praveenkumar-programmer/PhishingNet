@@ -173,7 +173,10 @@ public class PermissionPage extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "This app needs the above permissions to function", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

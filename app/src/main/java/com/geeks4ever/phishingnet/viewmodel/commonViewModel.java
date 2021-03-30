@@ -2,16 +2,15 @@ package com.geeks4ever.phishingnet.viewmodel;
 
 import android.app.Application;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.collection.CircularArray;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.geeks4ever.phishingnet.model.URLDBModel;
-import com.geeks4ever.phishingnet.model.URLmodel;
 import com.geeks4ever.phishingnet.model.repository.CommonRepository;
 import com.geeks4ever.phishingnet.services.CheckerService;
 
@@ -19,14 +18,13 @@ import java.util.List;
 
 public class commonViewModel extends AndroidViewModel{
 
-    private CommonRepository repository;
+    private final CommonRepository repository;
 
-
-    private MutableLiveData<List<URLDBModel>> URLList = new MutableLiveData<>();
-    private MutableLiveData<List<String>> AppList= new MutableLiveData<>();
-    private MutableLiveData<Boolean> mainServiceOnOffSetting= new MutableLiveData<>();
-    private MutableLiveData<Boolean> FloatingWindowServiceOnOffSetting= new MutableLiveData<>();
-    private MutableLiveData<Boolean> nightMode= new MutableLiveData<>();
+    private final MutableLiveData<List<URLDBModel>> URLList = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> AppList= new MutableLiveData<>();
+    private final MutableLiveData<Boolean> mainServiceOnOffSetting= new MutableLiveData<>();
+    private final MutableLiveData<Boolean> FloatingWindowServiceOnOffSetting= new MutableLiveData<>();
+    private final MutableLiveData<Boolean> nightMode= new MutableLiveData<>();
 
     public commonViewModel(@NonNull Application application) {
         super(application);
@@ -35,8 +33,7 @@ public class commonViewModel extends AndroidViewModel{
         repository.getURLList().observeForever(new Observer<List<URLDBModel>>() {
             @Override
             public void onChanged(List<URLDBModel> urldbModels) {
-                if(urldbModels != null)
-                    URLList.setValue(urldbModels);
+                URLList.setValue(urldbModels);
             }
         });
 
@@ -45,34 +42,28 @@ public class commonViewModel extends AndroidViewModel{
         repository.getDarkMode().observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(aBoolean != null)
-                    nightMode.setValue(aBoolean);
+                nightMode.setValue(aBoolean);
             }
         });
 
         repository.getMainServiceOnOffSetting().observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if (aBoolean != null) {
-                    mainServiceOnOffSetting.setValue(aBoolean);
-                }
+                mainServiceOnOffSetting.setValue(aBoolean);
             }
         });
 
         repository.getFloatingWindowServiceOnOffSetting().observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if (aBoolean != null) {
-                    FloatingWindowServiceOnOffSetting.setValue(aBoolean);
-                }
+                FloatingWindowServiceOnOffSetting.setValue(aBoolean);
             }
         });
 
         repository.getAppList().observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                if(strings != null)
-                    AppList.setValue(strings);
+                AppList.setValue(strings);
             }
         });
 
@@ -117,16 +108,12 @@ public class commonViewModel extends AndroidViewModel{
 
     //___________________________________________ setters __________________________________________
 
-
-    public void setURLList( CircularArray<URLmodel> URLList) {
-        repository.setURLList(URLList);
-    }
-
     public void addApp(String app) {
         repository.addApp(app);
     }
 
     public void toggleMainServiceOnOffSetting() {
+        Log.e("viewModel onButton", "clicked");
         repository.toggleMainServiceOnOff();
     }
 
