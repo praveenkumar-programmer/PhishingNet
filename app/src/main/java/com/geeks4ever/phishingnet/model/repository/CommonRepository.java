@@ -2,6 +2,7 @@ package com.geeks4ever.phishingnet.model.repository;
 
 import android.app.Application;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.collection.CircularArray;
 import androidx.lifecycle.LiveData;
@@ -43,7 +44,7 @@ public class CommonRepository {
         commonDAO.getAppList().observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                if(strings != null && !strings.isEmpty())
+                if(strings != null )
                     AppList.setValue(strings);
             }
         });
@@ -59,6 +60,7 @@ public class CommonRepository {
         commonDAO.getSetting("mainService").observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+                Log.e("repo", String.valueOf(aBoolean));
                 if(aBoolean != null)
                     mainServiceOnOffSetting.setValue(aBoolean);
             }
@@ -135,8 +137,11 @@ public class CommonRepository {
             @Override
             public void run() {
 
+
                 boolean b = mainServiceOnOffSetting.getValue() != null && !mainServiceOnOffSetting.getValue();
                 commonDAO.setSetting(new SettingsDBModel("mainService", b));
+
+                Log.e("repo clicked", String.valueOf(b) );
             }
         });
     }

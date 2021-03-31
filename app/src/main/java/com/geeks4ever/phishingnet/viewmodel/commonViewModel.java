@@ -117,11 +117,15 @@ public class commonViewModel extends AndroidViewModel{
         repository.toggleMainServiceOnOff();
     }
 
+    public void appClicked(String app){
+
+    }
+
     public void toggleFloatingWindowServiceOnOffSetting() {
         repository.toggleFloatingWindowServiceOnOff();
 
     }public void toggleMainServiceOnOffSetting(boolean a) {
-        repository.toggleMainServiceOnOff();
+        repository.toggleMainServiceOnOff(a);
     }
 
     public void toggleFloatingWindowServiceOnOffSetting(boolean a) {

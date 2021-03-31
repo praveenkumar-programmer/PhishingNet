@@ -1,206 +1,304 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".view.SettingsPage">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settings_page_dark_mode"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:padding="16dp"
-        android:orientation="horizontal">
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:id="@+id/settings_page_dark_mode_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:tint="@color/indigo_a200"
             android:layout_gravity="center"
             android:src="@drawable/night_mode_icon"
-            app:tint="@color/indigo_500" />
+            app:layout_constraintTop_toTopOf="@id/settings_page_dark_mode_title"
+            app:layout_constraintBottom_toBottomOf="@id/settings_page_dark_mode_desc"
+            app:layout_constraintStart_toStartOf="parent"/>
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/settings_page_dark_mode_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Dark theme"
+            android:textStyle="bold"
+            android:layout_marginStart="30dp"
+            app:layout_constraintStart_toEndOf="@id/settings_page_dark_mode_icon"
+            app:layout_constraintEnd_toStartOf="@id/settings_page_dark_mode_toggle"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/settings_page_dark_mode_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Enables Dark theme throughout the app."
+            app:layout_constraintStart_toStartOf="@id/settings_page_dark_mode_title"
+            app:layout_constraintEnd_toEndOf="@id/settings_page_dark_mode_title"
+            app:layout_constraintTop_toBottomOf="@id/settings_page_dark_mode_title"
+            android:layout_gravity="center_vertical"/>
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/settings_page_dark_mode_toggle"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            app:layout_constraintStart_toEndOf="@id/settings_page_dark_mode_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/settings_page_dark_mode_title"
+            app:layout_constraintBottom_toBottomOf="@id/settings_page_dark_mode_desc"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Dark Theme"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Enables Dark theme throght the app."
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"/>
 
-        </LinearLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_page_dark_mode" />
 
-        <FrameLayout
-            android:layout_width="2dp"
-            android:layout_height="match_parent"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settings_page_floating_window"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintTop_toBottomOf="@id/settings_page_dark_mode"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/settings_page_Floating_window_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:tint="@color/indigo_a200"
+            app:layout_constraintTop_toTopOf="@id/settings_page_Floating_window_title"
+            app:layout_constraintBottom_toBottomOf="@id/settings_page_Floating_window_desc"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_gravity="center"
+            android:src="@drawable/floating_window_icon" />
+
+        <TextView
+            android:id="@+id/settings_page_Floating_window_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/settings_page_Floating_window_icon"
+            app:layout_constraintEnd_toStartOf="@id/settings_page_floating_window_toggle"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Floating window"
+            android:textStyle="bold"
+            android:layout_marginStart="30dp"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/settings_page_Floating_window_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="A non touchable semi-transparent monitoring window at the right bottom side of the phone that shows all the URLs that are being scanned"
+            app:layout_constraintEnd_toEndOf="@+id/settings_page_Floating_window_title"
+            app:layout_constraintStart_toStartOf="@+id/settings_page_Floating_window_title"
+            app:layout_constraintTop_toBottomOf="@id/settings_page_Floating_window_title" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/settings_page_floating_window_toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:background="@android:color/darker_gray"/>
+            app:layout_constraintStart_toEndOf="@id/settings_page_Floating_window_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/settings_page_Floating_window_title"
+            app:layout_constraintBottom_toBottomOf="@id/settings_page_Floating_window_desc" />
 
-        <Space
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_page_floating_window" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settings_page_app_selection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintTop_toBottomOf="@id/settings_page_floating_window"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/settings_page_app_selection_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:tint="@color/indigo_a200"
+            app:layout_constraintTop_toTopOf="@id/settings_page_app_selection_title"
+            app:layout_constraintBottom_toBottomOf="@id/settings_page_app_selection_desc"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_gravity="center"
+            android:src="@drawable/apps_icon" />
+
+        <TextView
+            android:id="@+id/settings_page_app_selection_title"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"/>
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/settings_page_app_selection_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Apps selection"
+            android:textStyle="bold"
+            android:layout_marginStart="30dp"
+            android:layout_gravity="center_vertical"/>
 
-        <FrameLayout
-            android:id="@+id/settings_page_dark_mode_toggle_layout"
+        <TextView
+            android:id="@+id/settings_page_app_selection_desc"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="2">
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Select the apps to be monitored"
+            app:layout_constraintEnd_toEndOf="@+id/settings_page_app_selection_title"
+            app:layout_constraintStart_toStartOf="@+id/settings_page_app_selection_title"
+            app:layout_constraintTop_toBottomOf="@id/settings_page_app_selection_title" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/settings_page_dark_mode_toggle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"/>
-
-        </FrameLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_page_app_selection" />
 
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/settings_page_app_selection_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settings_page_logs"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:padding="16dp"
-        android:orientation="horizontal">
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintTop_toBottomOf="@id/settings_page_app_selection"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:id="@+id/settings_page_logs_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:tint="@color/indigo_a200"
+            app:layout_constraintTop_toTopOf="@id/settings_page_logs_title"
+            app:layout_constraintBottom_toBottomOf="@id/settings_page_logs_desc"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_gravity="center"
-            android:src="@drawable/apps_icon"
-            app:tint="@color/indigo_500" />
+            android:src="@drawable/log_icon" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:orientation="vertical">
+        <TextView
+            android:id="@+id/settings_page_logs_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/settings_page_logs_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Logs"
+            android:textStyle="bold"
+            android:layout_marginStart="30dp"
+            android:layout_gravity="center_vertical"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Apps selection"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Select the apps to be monitored."
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"/>
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/settings_page_logs_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="View the URLs that had been scanned."
+            app:layout_constraintEnd_toEndOf="@+id/settings_page_logs_title"
+            app:layout_constraintStart_toStartOf="@+id/settings_page_logs_title"
+            app:layout_constraintTop_toBottomOf="@id/settings_page_logs_title" />
 
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <LinearLayout
-        android:id="@+id/settings_page_logs_layout"
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_page_logs" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/settings_page_about"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:padding="16dp"
-        android:orientation="horizontal">
+        android:background="?attr/selectableItemBackground"
+        app:layout_constraintTop_toBottomOf="@id/settings_page_logs"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:id="@+id/settings_page_about_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:tint="@color/indigo_a200"
+            app:layout_constraintTop_toTopOf="@id/settings_page_about_title"
+            app:layout_constraintBottom_toBottomOf="@id/settings_page_about_desc"
+            app:layout_constraintStart_toStartOf="parent"
             android:layout_gravity="center"
-            android:src="@drawable/log_icon"
-            app:tint="@color/indigo_500" />
+            android:src="@drawable/about_us_icon" />
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:orientation="vertical">
+        <TextView
+            android:id="@+id/settings_page_about_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/settings_page_about_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="About"
+            android:textStyle="bold"
+            android:layout_marginStart="30dp"
+            android:layout_gravity="center_vertical"/>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Logs"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="view the URLs that had been scanned."
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
+        <TextView
+            android:id="@+id/settings_page_about_desc"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="Contact and Information"
+            app:layout_constraintEnd_toEndOf="@+id/settings_page_about_title"
+            app:layout_constraintStart_toStartOf="@+id/settings_page_about_title"
+            app:layout_constraintTop_toBottomOf="@id/settings_page_about_title" />
 
 
-    <LinearLayout
-        android:id="@+id/settings_page_about_layout"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:padding="16dp"
-        android:orientation="horizontal">
 
-        <ImageView
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            android:src="@drawable/about_us_icon"
-            app:tint="@color/indigo_500" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginStart="20dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="ABout"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Contact and information."
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_gravity="center_vertical"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
+    <View
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="?attr/dividerHorizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/settings_page_about" />
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

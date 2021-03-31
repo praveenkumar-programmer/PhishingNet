@@ -50,4 +50,6 @@ dependencies {
     //Dexter for permissions
     implementation 'com.karumi:dexter:6.2.2'
 
+    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+
 }

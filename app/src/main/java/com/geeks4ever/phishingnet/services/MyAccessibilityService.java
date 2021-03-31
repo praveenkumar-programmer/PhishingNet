@@ -34,14 +34,12 @@ public class MyAccessibilityService extends AccessibilityService {
         repository = CommonRepository.getInstance(getApplication());
         AppList = new ArrayList<>();
 
-
-        Log.e("inside accessibility", "created");
-
         AppListLiveData = repository.getAppList();
 
         AppListLiveData.observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
+                Log.e("acc applist changes", strings.toString());
                 AppList = strings;
             }
         });
@@ -51,7 +49,6 @@ public class MyAccessibilityService extends AccessibilityService {
         MainServiceOnOffSettingLiveData.observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                Log.e("inside acc serv", String.valueOf(aBoolean));
                 isOn = aBoolean;
             }
         });
@@ -76,14 +73,11 @@ public class MyAccessibilityService extends AccessibilityService {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e("inside accessibility", "onStart");
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent accessibilityEvent) {
-
-        Log.e("inside accessibility", "accessibility event");
 
         if (!isOn)
             return;
@@ -100,6 +94,10 @@ public class MyAccessibilityService extends AccessibilityService {
 
     private void checkUrlsFromViews(AccessibilityNodeInfo source) {
 
+        startService(new Intent(this, CheckerService.class));
+        if(isFloatingWindowOn)
+            startService(new Intent(getBaseContext(), FloatingWindowService.class));
+
         if (AppList.contains(String.valueOf(source.getPackageName()))) {
 
             if (source.getText() != null && source.getText().length() > 0) {
@@ -112,9 +110,6 @@ public class MyAccessibilityService extends AccessibilityService {
                     if( capturedText.contains("https://")
                             || capturedText.contains("http://") || capturedText.contains("www.")) {
                         repository.setCurrentUrl(capturedText);
-                        startService(new Intent(this, CheckerService.class));
-                        if(isFloatingWindowOn)
-                            startService(new Intent(getBaseContext(), FloatingWindowService.class));
 
                     }
 

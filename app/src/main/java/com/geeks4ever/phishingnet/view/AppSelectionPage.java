@@ -1,19 +1,26 @@
 package com.geeks4ever.phishingnet.view;
 
+import android.app.ProgressDialog;
 import android.content.pm.PackageInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.geeks4ever.phishingnet.R;
+import com.geeks4ever.phishingnet.model.appDetails;
 import com.geeks4ever.phishingnet.view.adaptors.AppListAdaptor;
 import com.geeks4ever.phishingnet.viewmodel.commonViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class AppSelectionPage extends AppCompatActivity {
 
@@ -34,50 +41,69 @@ public class AppSelectionPage extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.app_selection_page_recycler_view);
 
-        adaptor = new AppListAdaptor(this, viewModel);
+        adaptor = new AppListAdaptor(viewModel);
+
+
+        viewModel.getAppList().observeForever(new Observer<List<String>>() {
+            @Override
+            public void onChanged(List<String> strings) {
+                adaptor.updateCurrentApps(strings);
+            }
+        });
+
         recyclerView.setHasFixedSize(false);
         recyclerView.setAdapter(adaptor);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adaptor.updateList(getInstalledApps(false));
+        updateAppsListInBackground();
 
     }
 
-//    class PInfo {
-//        private String appname = "";
-//        private String pname = "";
-//        private String versionName = "";
-//        private int versionCode = 0;
-//        private Drawable icon;
-//        private void prettyPrint() {
-//            Log.e("app",appname + "\t" + pname + "\t" + versionName + "\t" + versionCode);
-//        }
-//    }
+    private void updateAppsListInBackground(){
+        ProgressDialog nDialog;
+        nDialog = new ProgressDialog(AppSelectionPage.this);
+        nDialog.setMessage("getting apps..");
+        nDialog.setIndeterminate(false);
+        nDialog.setCancelable(true);
+        nDialog.show();
 
-//    private ArrayList<PInfo> getPackages() {
-//        ArrayList<PInfo> apps = getInstalledApps(false); /* false = no system packages */
-//        final int max = apps.size();
-//        for (int i=0; i<max; i++) {
-//            apps.get(i).prettyPrint();
-//        }
-//        return apps;
-//    }
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Handler handler =  new Handler(Looper.getMainLooper());
 
-    private ArrayList<String> getInstalledApps(boolean getSysPackages) {
-        ArrayList<String> res = new ArrayList<>();
+        executor.execute(
+                new Runnable() {
+                    @Override
+                    public void run() {
+
+                        adaptor.updateList(getInstalledApps());
+
+                        handler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                adaptor.notifyDataSetChanged();
+                                nDialog.dismiss();
+                            }
+                        });
+                    }
+                }
+        );
+    }
+
+
+    private ArrayList<appDetails> getInstalledApps() {
+
+        ArrayList<appDetails> res = new ArrayList<>();
         List<PackageInfo> packs = getPackageManager().getInstalledPackages(0);
         for(int i=0;i<packs.size();i++) {
             PackageInfo p = packs.get(i);
-            if ((!getSysPackages) && (p.versionName == null)) {
+            if ((p.versionName == null)) {
                 continue ;
             }
-//            PInfo newInfo = new PInfo();
-//            newInfo.appname = p.applicationInfo.loadLabel(getPackageManager()).toString();
-//            newInfo.pname = p.packageName;
-//            newInfo.versionName = p.versionName;
-//            newInfo.versionCode = p.versionCode;
-//            newInfo.icon = p.applicationInfo.loadIcon(getPackageManager());
-            res.add(p.packageName);
+            appDetails newInfo = new appDetails();
+            newInfo.appName = p.applicationInfo.loadLabel(getPackageManager()).toString();
+            newInfo.packageName = p.packageName;
+            newInfo.icon = p.applicationInfo.loadIcon(getPackageManager());
+            res.add(newInfo);
         }
         return res;
     }
