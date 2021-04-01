@@ -5,8 +5,11 @@ import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,10 +22,10 @@ import com.geeks4ever.phishingnet.R;
 import com.geeks4ever.phishingnet.model.appDetails;
 import com.geeks4ever.phishingnet.view.adaptors.AppListAdaptor;
 import com.geeks4ever.phishingnet.viewmodel.AppSelectionViewModel;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class AppSelectionPage extends AppCompatActivity {
@@ -30,12 +33,23 @@ public class AppSelectionPage extends AppCompatActivity {
     private AppListAdaptor adaptor;
     private AppSelectionViewModel viewModel;
 
+    private ArrayList<String> appPackageList = new ArrayList<>();
+    private List<String> currentAppList = new ArrayList<>();
+
     RecyclerView recyclerView;
+    MaterialCheckBox selectAll;
+    TextView selectAllText;
+    ProgressDialog nDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_selection_page);
+
+        nDialog = new ProgressDialog(AppSelectionPage.this);
+        nDialog.setMessage("getting apps..");
+        nDialog.setIndeterminate(false);
+        nDialog.setCancelable(false);
 
 
         if(getSupportActionBar() != null)
@@ -48,6 +62,9 @@ public class AppSelectionPage extends AppCompatActivity {
             }
         });
 
+        selectAll = findViewById(R.id.app_selection_page_select_all_check_box);
+        selectAllText = findViewById(R.id.app_selection_page_select_all_text);
+
 
         viewModel = new ViewModelProvider(this, new ViewModelProvider
                 .AndroidViewModelFactory(  getApplication()  )).get(AppSelectionViewModel.class);
@@ -57,11 +74,16 @@ public class AppSelectionPage extends AppCompatActivity {
 
         adaptor = new AppListAdaptor(viewModel);
 
+        getAppDetailsInBackground();
 
         viewModel.getAppList().observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
+                currentAppList = strings;
+                selectAllText.setText(strings.size() + " Apps Selected");
                 adaptor.updateCurrentApps(strings);
+                if(nDialog.isShowing() && strings.size() == 0 || strings.size() == appPackageList.size())
+                    nDialog.dismiss();
             }
         });
 
@@ -69,32 +91,50 @@ public class AppSelectionPage extends AppCompatActivity {
         recyclerView.setAdapter(adaptor);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        updateAppsListInBackground();
+        selectAll.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if(b)
+                    viewModel.addAllApps(appPackageList);
+                else
+                    viewModel.removeAllApps(appPackageList);
+                nDialog.show();
+                adaptor.notifyDataSetChanged();
+            }
+        });
+
 
     }
 
-    private void updateAppsListInBackground(){
+    private void getAppDetailsInBackground() {
 
-        ProgressDialog nDialog;
-        nDialog = new ProgressDialog(AppSelectionPage.this);
-        nDialog.setMessage("getting apps..");
-        nDialog.setIndeterminate(false);
-        nDialog.setCancelable(true);
         nDialog.show();
 
-        ExecutorService executor = Executors.newSingleThreadExecutor();
-        Handler handler =  new Handler(Looper.getMainLooper());
-
-        executor.execute(
+        Executors.newSingleThreadExecutor()
+                .execute(
                 new Runnable() {
                     @Override
                     public void run() {
 
-                        adaptor.updateList(getInstalledApps());
+                        ArrayList<String> temp = new ArrayList<>();
+                        ArrayList<appDetails> appDetails = getInstalledApps();
 
-                        handler.post(new Runnable() {
+                        for (int i=0; i<appDetails.size(); i++) {
+                            temp.add(appDetails.get(i).packageName);
+                        }
+
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
+                                if((currentAppList.size() == appDetails.size()) && appDetails.size() > 0)
+                                    selectAll.setChecked(true);
+
+                                appPackageList = temp;
+
+                                Log.e("lis size = ", String.valueOf(appPackageList.size()));
+                                Log.e("applist size", String.valueOf(appDetails.size()));
+
+                                adaptor.updateList(appDetails, appPackageList);
                                 adaptor.notifyDataSetChanged();
                                 nDialog.dismiss();
                             }
@@ -102,13 +142,13 @@ public class AppSelectionPage extends AppCompatActivity {
                     }
                 }
         );
-
     }
 
 
     private ArrayList<appDetails> getInstalledApps() {
 
         ArrayList<appDetails> res = new ArrayList<>();
+
         List<PackageInfo> packs = getPackageManager().getInstalledPackages(0);
         for(int i=0;i<packs.size();i++) {
             PackageInfo p = packs.get(i);
@@ -121,10 +161,22 @@ public class AppSelectionPage extends AppCompatActivity {
             newInfo.icon = p.applicationInfo.loadIcon(getPackageManager());
             res.add(newInfo);
         }
+
         return res;
     }
 
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getAppDetailsInBackground();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getAppDetailsInBackground();
+    }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

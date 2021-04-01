@@ -38,20 +38,18 @@ public class AppListAdaptor extends RecyclerView.Adapter<AppListAdaptor.ViewHold
 
     }
 
-    public void updateList(ArrayList<appDetails> list){
+    public void updateList(ArrayList<appDetails> list, ArrayList<String> appNameList){
 
         this.appDetails = list;
-
-        for(int i=0; i < appDetails.size(); i++)
-            allAppsList.add(i, appDetails.get(i).packageName);
+        allAppsList = appNameList;
         if(viewModel.getAppList() != null && viewModel.getAppList().getValue() != null )
             currentAppsList = viewModel.getAppList().getValue();
     }
 
     public void updateCurrentApps(List<String> currentList){
         this.currentAppsList = currentList;
+        this.notifyDataSetChanged();
     }
-
 
     @NonNull
     @Override
@@ -105,7 +103,7 @@ public class AppListAdaptor extends RecyclerView.Adapter<AppListAdaptor.ViewHold
 
     @Override
     public int getItemCount() {
-        return allAppsList.size();
+        return appDetails.size()-1;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

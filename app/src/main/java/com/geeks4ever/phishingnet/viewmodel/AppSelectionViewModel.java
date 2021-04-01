@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer;
 import com.geeks4ever.phishingnet.model.repository.CommonRepository;
 import com.geeks4ever.phishingnet.services.CheckerService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AppSelectionViewModel extends AndroidViewModel{
@@ -56,6 +57,14 @@ public class AppSelectionViewModel extends AndroidViewModel{
 
     public void removeApp(String app){
         repository.removeApp(app);
+    }
+
+    public void addAllApps(ArrayList<String> apps){
+        repository.addAllApps(apps);
+    }
+
+    public void removeAllApps(ArrayList<String> apps){
+        repository.removeAllApps(apps);
     }
 
 

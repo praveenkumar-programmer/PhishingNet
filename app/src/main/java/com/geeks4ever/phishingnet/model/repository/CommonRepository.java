@@ -14,6 +14,7 @@ import com.geeks4ever.phishingnet.model.SettingsDBModel;
 import com.geeks4ever.phishingnet.model.URLDBModel;
 import com.geeks4ever.phishingnet.model.URLmodel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -121,7 +122,35 @@ public class CommonRepository {
         Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
-                commonDAO.setApp(new AppListDBModel(app));
+                if(app != null)
+                    commonDAO.setApp(new AppListDBModel(app));
+            }
+        });
+
+    }
+
+    public void addAllApps(ArrayList<String> apps){
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                for (String app: apps) {
+                    if(app != null)
+                        commonDAO.setApp(new AppListDBModel(app));
+                }
+            }
+        });
+
+    }
+
+    public void removeAllApps(ArrayList<String> apps){
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                for (String app: apps) {
+                    commonDAO.removeApp(new AppListDBModel(app));
+                }
             }
         });
 
@@ -186,22 +215,10 @@ public class CommonRepository {
 
     }
 
-    public void toggleFloatingWindowServiceOnOff(boolean a){
-
-
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                commonDAO.setSetting(new SettingsDBModel("floatingWindowService", a));
-            }
-        });
-
-    }
-
-
-
 
     //_________________________________________ setters ____________________________________________
+
+
 
     public void setURLList(CircularArray<URLmodel> array){
         Executors.newSingleThreadExecutor().execute(new Runnable() {
