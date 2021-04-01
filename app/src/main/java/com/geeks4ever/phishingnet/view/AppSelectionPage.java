@@ -65,7 +65,7 @@ public class AppSelectionPage extends AppCompatActivity {
             }
         });
 
-        recyclerView.setHasFixedSize(false);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setAdapter(adaptor);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

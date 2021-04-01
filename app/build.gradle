@@ -45,6 +45,7 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:2.2.6"
     implementation "android.arch.persistence.room:rxjava2:2.2.6"
 
+    //LiveDataReactiveStream
     implementation "androidx.lifecycle:lifecycle-reactivestreams:2.3.1"
 
     //Gson

@@ -2,7 +2,6 @@ package com.geeks4ever.phishingnet.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -52,7 +51,6 @@ public class SettingsPage extends AppCompatActivity {
 
         nightMode = (viewModel.getNightMode() != null && viewModel.getNightMode().getValue() != null && viewModel.getNightMode().getValue());
 
-        Log.e("db nmode", String.valueOf(nightMode));
         darkModeToggle.setChecked(nightMode);
 
         viewModel.getFloatingWindowServiceOnOffSetting().observe(this, new Observer<Boolean>() {

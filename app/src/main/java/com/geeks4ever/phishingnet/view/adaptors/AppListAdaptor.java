@@ -3,7 +3,6 @@ package com.geeks4ever.phishingnet.view.adaptors;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -87,14 +86,18 @@ public class AppListAdaptor extends RecyclerView.Adapter<AppListAdaptor.ViewHold
             }
         });
 
-        holder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            public void onClick(View view) {
 
-                if(b)
-                    viewModel.addApp(allAppsList.get(position));
-                else
+                if(currentAppsList.contains(allAppsList.get(position))){
+                    holder.checkBox.setChecked(false);
                     viewModel.removeApp(allAppsList.get(position));
+                }
+                else{
+                    holder.checkBox.setChecked(true);
+                    viewModel.addApp(allAppsList.get(position));
+                }
             }
         });
 
