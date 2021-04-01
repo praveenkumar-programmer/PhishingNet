@@ -46,12 +46,8 @@ public class CheckerService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        Log.e("checker service", "s");
-
         repository = CommonRepository.getInstance(getApplication());
         queue = Volley.newRequestQueue(this);
-        if (queue == null)
-            queue = Volley.newRequestQueue(this);
 
         repository.getCurrentUrl().observeForever(new Observer<List<String>>() {
             @Override
@@ -71,8 +67,6 @@ public class CheckerService extends Service {
 
 
     private void checkURL(String s) {
-
-        Log.e("inside checker service", s);
 
         if (s.contains("instagram")) {
             s = instagramURLDecoder(s);

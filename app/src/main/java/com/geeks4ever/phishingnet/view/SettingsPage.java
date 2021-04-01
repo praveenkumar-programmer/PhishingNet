@@ -14,12 +14,12 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.geeks4ever.phishingnet.R;
-import com.geeks4ever.phishingnet.viewmodel.commonViewModel;
+import com.geeks4ever.phishingnet.viewmodel.SettingsViewModel;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingsPage extends AppCompatActivity {
 
-    private commonViewModel viewModel;
+    private SettingsViewModel viewModel;
 
     SwitchMaterial darkModeToggle, floatingWindowToggle;
     ConstraintLayout darkModeLayout, floatingWindowLayout, appSelectionLayout, logsLayout, aboutLayout;
@@ -42,9 +42,9 @@ public class SettingsPage extends AppCompatActivity {
         aboutLayout = findViewById(R.id.settings_page_about);
 
         viewModel = new ViewModelProvider(this, new ViewModelProvider
-                .AndroidViewModelFactory(  getApplication()  )).get(commonViewModel.class);
+                .AndroidViewModelFactory(  getApplication()  )).get(SettingsViewModel.class);
 
-        viewModel.getNightMode().observeForever(new Observer<Boolean>() {
+        viewModel.getNightMode().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
@@ -59,7 +59,7 @@ public class SettingsPage extends AppCompatActivity {
         });
 
 
-        viewModel.getFloatingWindowServiceOnOffSetting().observeForever(new Observer<Boolean>() {
+        viewModel.getFloatingWindowServiceOnOffSetting().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 floatingWindowToggle.setChecked(aBoolean);

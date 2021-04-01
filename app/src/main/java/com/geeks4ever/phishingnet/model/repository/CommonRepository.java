@@ -1,11 +1,11 @@
 package com.geeks4ever.phishingnet.model.repository;
 
 import android.app.Application;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.collection.CircularArray;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.LiveDataReactiveStreams;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
@@ -16,6 +16,7 @@ import com.geeks4ever.phishingnet.model.URLDBModel;
 import com.geeks4ever.phishingnet.model.URLmodel;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class CommonRepository {
 
@@ -33,7 +34,8 @@ public class CommonRepository {
 
         commonDAO = CommonDatabase.getInstance(application).commonDAO();
 
-        commonDAO.getURLList().observeForever(new Observer<List<URLDBModel>>() {
+
+        LiveDataReactiveStreams.fromPublisher(commonDAO.getURLList()).observeForever(new Observer<List<URLDBModel>>() {
             @Override
             public void onChanged(List<URLDBModel> urldbModels) {
                 if(urldbModels != null && !urldbModels.isEmpty())
@@ -41,7 +43,7 @@ public class CommonRepository {
             }
         });
 
-        commonDAO.getAppList().observeForever(new Observer<List<String>>() {
+        LiveDataReactiveStreams.fromPublisher(commonDAO.getAppList()).observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
                 if(strings != null )
@@ -49,7 +51,7 @@ public class CommonRepository {
             }
         });
 
-        commonDAO.getCurrentUrl().observeForever(new Observer<List<String>>() {
+        LiveDataReactiveStreams.fromPublisher(commonDAO.getCurrentUrl()).observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
                 if(strings != null && !strings.isEmpty())
@@ -57,7 +59,8 @@ public class CommonRepository {
             }
         });
 
-        commonDAO.getSetting("mainService").observeForever(new Observer<Boolean>() {
+
+        LiveDataReactiveStreams.fromPublisher(commonDAO.getSetting("mainService")).observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 Log.e("repo", String.valueOf(aBoolean));
@@ -66,7 +69,7 @@ public class CommonRepository {
             }
         });
 
-        commonDAO.getSetting("floatingWindowService").observeForever(new Observer<Boolean>() {
+        LiveDataReactiveStreams.fromPublisher(commonDAO.getSetting("floatingWindowService")).observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean != null)
@@ -74,7 +77,7 @@ public class CommonRepository {
             }
         });
 
-        commonDAO.getSetting("nightMode").observeForever(new Observer<Boolean>() {
+        LiveDataReactiveStreams.fromPublisher(commonDAO.getSetting("nightMode")).observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 if(aBoolean != null)
@@ -115,15 +118,30 @@ public class CommonRepository {
     }
 
     public void addApp(String app){
-        new AddAppAsyncTask(commonDAO).execute(app);
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                commonDAO.setApp(new AppListDBModel(app));
+            }
+        });
+
     }
 
     public void removeApp(String app){
-        new RemoveAppAsyncTask(commonDAO).execute(app);
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                commonDAO.removeApp(new AppListDBModel(app));
+            }
+        });
+
     }
 
     public  void setNightMode(boolean a){
-        AsyncTask.execute(new Runnable() {
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 commonDAO.setSetting(new SettingsDBModel("nightMode", a));
@@ -133,7 +151,7 @@ public class CommonRepository {
 
     public void toggleMainServiceOnOff(){
 
-        AsyncTask.execute(new Runnable() {
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
 
@@ -148,7 +166,8 @@ public class CommonRepository {
 
     public void toggleFloatingWindowServiceOnOff(){
 
-        AsyncTask.execute(new Runnable() {
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
 
@@ -161,17 +180,19 @@ public class CommonRepository {
 
     public void toggleMainServiceOnOff(boolean a){
 
-        AsyncTask.execute(new Runnable() {
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 commonDAO.setSetting(new SettingsDBModel("mainService", a));
             }
         });
+
     }
 
     public void toggleFloatingWindowServiceOnOff(boolean a){
 
-        AsyncTask.execute(new Runnable() {
+
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
             @Override
             public void run() {
                 commonDAO.setSetting(new SettingsDBModel("floatingWindowService", a));
@@ -186,74 +207,25 @@ public class CommonRepository {
     //_________________________________________ setters ____________________________________________
 
     public void setURLList(CircularArray<URLmodel> array){
-        new SetURLListAsyncTask(commonDAO).execute(new URLDBModel(0, array));
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                commonDAO.setURLList(new URLDBModel(0, array));
+            }
+        });
+
     }
 
     public void setCurrentUrl(String string){
-        new setCurrentURLAsyncTask(commonDAO).execute(string);
+        Executors.newSingleThreadExecutor().execute(new Runnable() {
+            @Override
+            public void run() {
+                commonDAO.setCurrentURL(new CurrentURLDBModel(0, string));
+            }
+        });
     }
 
 
-
-    private static class RemoveAppAsyncTask extends AsyncTask<String, Void, Void> {
-
-        private CommonDAO dao;
-
-        private RemoveAppAsyncTask(CommonDAO modeDAO){
-            this.dao = modeDAO;
-        }
-
-        @Override
-        protected Void doInBackground(String... items) {
-            dao.removeApp(new AppListDBModel(items[0]));
-            return null;
-        }
-    }
-
-    private static class AddAppAsyncTask extends AsyncTask<String, Void, Void> {
-
-        private CommonDAO dao;
-
-        private AddAppAsyncTask(CommonDAO modeDAO){
-            this.dao = modeDAO;
-        }
-
-        @Override
-        protected Void doInBackground(String... items) {
-            dao.setApp(new AppListDBModel(items[0]));
-            return null;
-        }
-    }
-
-    private static class SetURLListAsyncTask extends AsyncTask<URLDBModel, Void, Void> {
-
-        private CommonDAO dao;
-
-        private SetURLListAsyncTask(CommonDAO modeDAO){
-            this.dao = modeDAO;
-        }
-
-        @Override
-        protected Void doInBackground(URLDBModel... items) {
-            dao.setURLList(items[0]);
-            return null;
-        }
-    }
-
-    private static class setCurrentURLAsyncTask extends AsyncTask<String, Void, Void> {
-
-        private CommonDAO dao;
-
-        private setCurrentURLAsyncTask(CommonDAO modeDAO){
-            this.dao = modeDAO;
-        }
-
-        @Override
-        protected Void doInBackground(String... items) {
-            dao.setCurrentURL(new CurrentURLDBModel(0, items[0]));
-            return null;
-        }
-    }
 
     //______________________________________ getters _______________________________________________
 

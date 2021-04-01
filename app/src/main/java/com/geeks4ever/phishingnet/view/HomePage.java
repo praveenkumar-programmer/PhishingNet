@@ -12,19 +12,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.geeks4ever.phishingnet.R;
-import com.geeks4ever.phishingnet.services.FloatingWindowService;
-import com.geeks4ever.phishingnet.viewmodel.commonViewModel;
+import com.geeks4ever.phishingnet.viewmodel.HomePageViewModel;
 import com.google.android.material.button.MaterialButton;
 
 public class HomePage extends AppCompatActivity {
 
-    private commonViewModel viewModel;
+    private HomePageViewModel viewModel;
 
     ImageView imageView;
     TextView textView;
@@ -40,23 +38,13 @@ public class HomePage extends AppCompatActivity {
         button = findViewById(R.id.home_page_button);
 
         viewModel = new ViewModelProvider(this, new ViewModelProvider
-                .AndroidViewModelFactory(  getApplication()  )).get(commonViewModel.class);
+                .AndroidViewModelFactory(  getApplication()  )).get(HomePageViewModel.class);
 
         getPermissions();
 
-        viewModel.getFloatingWindowServiceOnOffSetting().observeForever(new Observer<Boolean>() {
+        viewModel.getMainServiceOnOffSetting().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(aBoolean != null && aBoolean)
-                    startService(new Intent(getBaseContext(), FloatingWindowService.class));
-            }
-        });
-
-        viewModel.getMainServiceOnOffSetting().observeForever(new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-
-                Log.e("toggle", String.valueOf(aBoolean));
 
                 if(aBoolean){
                     textView.setText("YOU ARE PROTECTED");
@@ -67,14 +55,6 @@ public class HomePage extends AppCompatActivity {
                     imageView.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.off_icon, null));
                     button.setText("enable");
                 }
-            }
-        });
-
-        viewModel.getNightMode().observeForever(new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                AppCompatDelegate.setDefaultNightMode((aBoolean)? AppCompatDelegate.MODE_NIGHT_YES
-                        : AppCompatDelegate.MODE_NIGHT_NO);
             }
         });
 

@@ -2,7 +2,6 @@ package com.geeks4ever.phishingnet.services;
 
 import android.accessibilityservice.AccessibilityService;
 import android.content.Intent;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -39,7 +38,6 @@ public class MyAccessibilityService extends AccessibilityService {
         AppListLiveData.observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
-                Log.e("acc applist changes", strings.toString());
                 AppList = strings;
             }
         });
@@ -103,8 +101,6 @@ public class MyAccessibilityService extends AccessibilityService {
             if (source.getText() != null && source.getText().length() > 0) {
 
                 String capturedText = source.getText().toString();
-
-                Log.e("captured link", capturedText);
 
                 if (!capturedText.equals(currentURL))
                     if( capturedText.contains("https://")

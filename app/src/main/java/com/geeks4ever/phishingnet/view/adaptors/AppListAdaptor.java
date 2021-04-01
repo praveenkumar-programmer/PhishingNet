@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.geeks4ever.phishingnet.R;
 import com.geeks4ever.phishingnet.model.appDetails;
-import com.geeks4ever.phishingnet.viewmodel.commonViewModel;
+import com.geeks4ever.phishingnet.viewmodel.AppSelectionViewModel;
 import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.ArrayList;
@@ -26,9 +26,9 @@ public class AppListAdaptor extends RecyclerView.Adapter<AppListAdaptor.ViewHold
 
     private ArrayList<appDetails> appDetails;
 
-    private commonViewModel viewModel;
+    private final AppSelectionViewModel viewModel;
 
-    public AppListAdaptor(commonViewModel viewModel){
+    public AppListAdaptor(AppSelectionViewModel viewModel){
         this.allAppsList = new ArrayList<>();
         this.viewModel = viewModel;
 
@@ -76,7 +76,6 @@ public class AppListAdaptor extends RecyclerView.Adapter<AppListAdaptor.ViewHold
             @Override
             public void onClick(View view) {
 
-//                Log.e("current apps", currentAppsList.toString());
                 if(currentAppsList.contains(allAppsList.get(position))){
                     holder.checkBox.setChecked(false);
                     viewModel.removeApp(allAppsList.get(position));
@@ -92,7 +91,6 @@ public class AppListAdaptor extends RecyclerView.Adapter<AppListAdaptor.ViewHold
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-//                Log.e("current apps", currentAppsList.toString());
                 if(b)
                     viewModel.addApp(allAppsList.get(position));
                 else

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -47,8 +46,6 @@ public class FloatingWindowService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        Log.e("kpk", "inside floating service");
 
         URLList = new ArrayList<>();
         repository = CommonRepository.getInstance(getApplication());
@@ -123,8 +120,6 @@ public class FloatingWindowService extends Service {
         repository.getFloatingWindowServiceOnOffSetting().observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-
-                Log.e("float", String.valueOf(aBoolean));
 
                 if(isMainServiceOn && aBoolean)
                             alwaysOnFloatingWindow.setAlpha(0.5f);

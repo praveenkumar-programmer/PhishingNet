@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.geeks4ever.phishingnet.R;
 import com.geeks4ever.phishingnet.model.appDetails;
 import com.geeks4ever.phishingnet.view.adaptors.AppListAdaptor;
-import com.geeks4ever.phishingnet.viewmodel.commonViewModel;
+import com.geeks4ever.phishingnet.viewmodel.AppSelectionViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 public class AppSelectionPage extends AppCompatActivity {
 
     private AppListAdaptor adaptor;
-    private commonViewModel viewModel;
+    private AppSelectionViewModel viewModel;
 
     RecyclerView recyclerView;
 
@@ -36,7 +36,7 @@ public class AppSelectionPage extends AppCompatActivity {
 
 
         viewModel = new ViewModelProvider(this, new ViewModelProvider
-                .AndroidViewModelFactory(  getApplication()  )).get(commonViewModel.class);
+                .AndroidViewModelFactory(  getApplication()  )).get(AppSelectionViewModel.class);
 
 
         recyclerView = findViewById(R.id.app_selection_page_recycler_view);
@@ -44,7 +44,7 @@ public class AppSelectionPage extends AppCompatActivity {
         adaptor = new AppListAdaptor(viewModel);
 
 
-        viewModel.getAppList().observeForever(new Observer<List<String>>() {
+        viewModel.getAppList().observe(this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
                 adaptor.updateCurrentApps(strings);
@@ -60,6 +60,7 @@ public class AppSelectionPage extends AppCompatActivity {
     }
 
     private void updateAppsListInBackground(){
+
         ProgressDialog nDialog;
         nDialog = new ProgressDialog(AppSelectionPage.this);
         nDialog.setMessage("getting apps..");
@@ -87,6 +88,7 @@ public class AppSelectionPage extends AppCompatActivity {
                     }
                 }
         );
+
     }
 
 

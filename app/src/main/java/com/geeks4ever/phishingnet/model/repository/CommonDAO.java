@@ -1,6 +1,5 @@
 package com.geeks4ever.phishingnet.model.repository;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -12,6 +11,8 @@ import com.geeks4ever.phishingnet.model.SettingsDBModel;
 import com.geeks4ever.phishingnet.model.URLDBModel;
 
 import java.util.List;
+
+import io.reactivex.Flowable;
 
 import static androidx.room.OnConflictStrategy.REPLACE;
 
@@ -35,16 +36,16 @@ public interface CommonDAO {
     void setSetting(SettingsDBModel settingsDBModel);
 
     @Query("Select * from URLTable where `key`= 0")
-    LiveData<List<URLDBModel>> getURLList();
+    Flowable<List<URLDBModel>> getURLList();
 
     @Query("Select App from applisttable")
-    LiveData<List<String>> getAppList();
+    Flowable<List<String>> getAppList();
 
     @Query("Select url from currentURLTable")
-    LiveData<List<String>> getCurrentUrl();
+    Flowable<List<String>> getCurrentUrl();
 
     @Query( "Select value from SettingsTable where setting = :setting " )
-    LiveData<Boolean> getSetting(String setting);
+    Flowable<Boolean> getSetting(String setting);
 
 
 }
