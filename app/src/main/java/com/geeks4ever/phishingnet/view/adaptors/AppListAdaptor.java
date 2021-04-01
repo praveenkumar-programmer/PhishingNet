@@ -103,7 +103,7 @@ public class AppListAdaptor extends RecyclerView.Adapter<AppListAdaptor.ViewHold
 
     @Override
     public int getItemCount() {
-        return appDetails.size()-1;
+        return appDetails.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
