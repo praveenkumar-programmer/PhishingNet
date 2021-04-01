@@ -1,7 +1,6 @@
 package com.geeks4ever.phishingnet.model.repository;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.collection.CircularArray;
 import androidx.lifecycle.LiveData;
@@ -63,7 +62,6 @@ public class CommonRepository {
         LiveDataReactiveStreams.fromPublisher(commonDAO.getSetting("mainService")).observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                Log.e("repo", String.valueOf(aBoolean));
                 if(aBoolean != null)
                     mainServiceOnOffSetting.setValue(aBoolean);
             }
@@ -80,6 +78,7 @@ public class CommonRepository {
         LiveDataReactiveStreams.fromPublisher(commonDAO.getSetting("nightMode")).observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
+
                 if(aBoolean != null)
                     darkMode.setValue(aBoolean);
             }
@@ -158,8 +157,6 @@ public class CommonRepository {
 
                 boolean b = mainServiceOnOffSetting.getValue() != null && !mainServiceOnOffSetting.getValue();
                 commonDAO.setSetting(new SettingsDBModel("mainService", b));
-
-                Log.e("repo clicked", String.valueOf(b) );
             }
         });
     }

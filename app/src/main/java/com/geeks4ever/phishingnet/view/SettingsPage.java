@@ -8,7 +8,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,12 +16,18 @@ import com.geeks4ever.phishingnet.R;
 import com.geeks4ever.phishingnet.viewmodel.SettingsViewModel;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+import static androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode;
+
 public class SettingsPage extends AppCompatActivity {
 
     private SettingsViewModel viewModel;
 
     SwitchMaterial darkModeToggle, floatingWindowToggle;
     ConstraintLayout darkModeLayout, floatingWindowLayout, appSelectionLayout, logsLayout, aboutLayout;
+
+    public boolean nightMode = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +36,7 @@ public class SettingsPage extends AppCompatActivity {
 
         if(getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
         darkModeToggle = findViewById(R.id.settings_page_dark_mode_toggle);
         floatingWindowToggle = findViewById(R.id.settings_page_floating_window_toggle);
@@ -44,20 +50,10 @@ public class SettingsPage extends AppCompatActivity {
         viewModel = new ViewModelProvider(this, new ViewModelProvider
                 .AndroidViewModelFactory(  getApplication()  )).get(SettingsViewModel.class);
 
-        viewModel.getNightMode().observe(this, new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                if(aBoolean && AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_YES) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-                    darkModeToggle.setChecked(true);
-                }
-                else if(AppCompatDelegate.getDefaultNightMode() != AppCompatDelegate.MODE_NIGHT_NO) {
-                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-                    darkModeToggle.setChecked(false);
-                }
-            }
-        });
+        nightMode = (viewModel.getNightMode() != null && viewModel.getNightMode().getValue() != null && viewModel.getNightMode().getValue());
 
+        Log.e("db nmode", String.valueOf(nightMode));
+        darkModeToggle.setChecked(nightMode);
 
         viewModel.getFloatingWindowServiceOnOffSetting().observe(this, new Observer<Boolean>() {
             @Override
@@ -66,30 +62,34 @@ public class SettingsPage extends AppCompatActivity {
             }
         });
 
-        darkModeLayout.setOnClickListener(new View.OnClickListener() {
+        viewModel.getNightMode().observe(this, new Observer<Boolean>() {
             @Override
-            public void onClick(View view) {
-                Log.e("darkmode", "clicked");
-                viewModel.setNightMode(
-                        viewModel.getNightMode() != null
-                                && viewModel.getNightMode().getValue() != null
-                                && viewModel.getNightMode().getValue()
-                );
+            public void onChanged(Boolean aBoolean) {
+                if((aBoolean != nightMode)){
+                    nightMode = aBoolean;
+                    darkModeToggle.setChecked(aBoolean);
+                    setDefaultNightMode((aBoolean)? MODE_NIGHT_YES : MODE_NIGHT_NO);
+                }
             }
         });
 
-//        darkModeToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                viewModel.setNightMode(b);
-//            }
-//        });
+        darkModeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.setNightMode( !nightMode );
+            }
+        });
 
+        darkModeToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewModel.setNightMode( !nightMode );
+            }
+        });
 
         floatingWindowLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("floating", "clicked");
                 viewModel.toggleFloatingWindowServiceOnOffSetting(
                         viewModel.getFloatingWindowServiceOnOffSetting() != null
                                 && viewModel.getFloatingWindowServiceOnOffSetting().getValue() != null
@@ -97,7 +97,6 @@ public class SettingsPage extends AppCompatActivity {
                 );
             }
         });
-
 
 //        floatingWindowToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //            @Override
@@ -126,7 +125,6 @@ public class SettingsPage extends AppCompatActivity {
                 startActivity(new Intent(getBaseContext(), About.class));
             }
         });
-
 
     }
 
