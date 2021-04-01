@@ -98,12 +98,17 @@ public class SettingsPage extends AppCompatActivity {
             }
         });
 
-//        floatingWindowToggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                viewModel.toggleFloatingWindowServiceOnOffSetting(b);
-//            }
-//        });
+        floatingWindowToggle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                viewModel.toggleFloatingWindowServiceOnOffSetting(
+                    viewModel.getFloatingWindowServiceOnOffSetting() != null
+                            && viewModel.getFloatingWindowServiceOnOffSetting().getValue() != null
+                            && viewModel.getFloatingWindowServiceOnOffSetting().getValue()
+            );
+            }
+        });
 
         appSelectionLayout.setOnClickListener(new View.OnClickListener() {
             @Override
