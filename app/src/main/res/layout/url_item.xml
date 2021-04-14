@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/url_item_bg"
+        android:padding="5dp"
+        android:alpha="0.5"
+        android:layout_marginBottom="2dp"/>
 
     <TextView
         android:id="@+id/text_in_recycler_tem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/url_item_bg"
         android:padding="5dp"
-        android:textSize="8sp"
+        android:layout_marginBottom="2dp"
+        android:textSize="7dp"
         android:text="www.testingurl/howisthis?/golive"
         android:textColor="@color/warning_red"/>
 

@@ -19,7 +19,12 @@ public class QuickTileService extends TileService {
     public QuickTileService(){
 
         repository = CommonRepository.getInstance(getBaseContext());
+        if(getQsTile() == null)
+            return;
         tile = getQsTile();
+        mainServiceOn = getSharedPreferences("mainService", 0).getBoolean("mainService", false);
+        tile.setState((mainServiceOn)?Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
+        tile.updateTile();
     }
 
     @Override

@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 public class CheckerService extends Service {
 
@@ -72,14 +73,13 @@ public class CheckerService extends Service {
         }
 
         String finalS = s;
-        checkGoogleSafeBrowsing(finalS);
-//        Executors.newSingleThreadExecutor()
-//                .execute(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        checkGoogleSafeBrowsing(finalS);
-//                    }
-//                });
+        Executors.newSingleThreadExecutor()
+                .execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkGoogleSafeBrowsing(finalS);
+                    }
+                });
 
     }
 
@@ -111,12 +111,11 @@ public class CheckerService extends Service {
                             // response
                             if (response.has("matches")) {
                                 repository.addURL(new URLmodel(URLmodel.BAD_URL, urlToCheck));
-//                                Log.e("googlecheck true : ", urlToCheck);
+                                Log.e("googlecheck true : ", urlToCheck);
                             } else {
                                 //check with machine learning API
-//                                Log.e("googlecheck false : ", urlToCheck);
-//                                machineLearningCheck(urlToCheck2);
-                                repository.addURL(new URLmodel(URLmodel.GOOD_URL, urlToCheck));
+                                Log.e("googlecheck false : ", urlToCheck);
+                                machineLearningCheck(urlToCheck2);
                             }
                         }
                     },
@@ -150,28 +149,27 @@ public class CheckerService extends Service {
         try {
             //url
 
-//            Log.e("inside ml : ", urlToCheck);
-
-            final String urlToCheck2 = urlToCheck;
+            Log.e("inside ml : ", urlToCheck);
             JSONObject urlObject = new JSONObject();
             urlObject.put("url", urlToCheck);
-//            String url = "https://phish-defender.herokuapp.com/api";
-            String url = "https://rpadml.herokuapp.com/api";
+            String url = "https://phish-defender.herokuapp.com/api";
+//            String url = "https://rpadml.herokuapp.com/api";
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, urlObject,
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             // response
+                            Log.d("Response", response.toString());
                             if (response.has("prediction")) {
                                 try {
                                     int Result = response.getInt("prediction");
                                     if (Result == 1) {
-//                                        Log.e("ml true : ", urlToCheck);
+                                        Log.e("ml true : ", urlToCheck);
                                         repository.addURL(new URLmodel(URLmodel.BAD_URL, urlToCheck));
                                     }
                                     else{
-//                                        Log.e("ml false : ", urlToCheck);
+                                        Log.e("ml false : ", urlToCheck);
                                         repository.addURL(new URLmodel(URLmodel.GOOD_URL, urlToCheck));
                                     }
 
@@ -179,7 +177,6 @@ public class CheckerService extends Service {
                                     Log.e(TAG, jsx.toString());
                                 }
 
-                                //showFloatingWindow();
                             }
                         }
                     },

@@ -1,6 +1,7 @@
 package com.geeks4ever.phishingnet.view.adaptors;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,8 @@ public class URLListAdaptor extends RecyclerView.Adapter<URLListAdaptor.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
         int pos = (list.size() -1) - position;
-//        Log.e("inflate item : ", String.valueOf(pos) + " "+list.get(pos));
+        Log.e("list size : ", String.valueOf(list.size() -1));
+        Log.e("inflate item : ", String.valueOf(pos) + " "+list.get(pos));
 
         holder.text.setText(UrlDetails.get(pos).url);
         holder.text.setTextColor((UrlDetails.get(pos).status == URLmodel.BAD_URL)?

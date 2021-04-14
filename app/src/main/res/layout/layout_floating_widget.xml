@@ -19,8 +19,8 @@
             android:id="@+id/floating_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingVertical="30dp"
-            android:paddingHorizontal="20dp"
+            android:paddingVertical="32dp"
+            android:paddingHorizontal="22dp"
             android:clickable="false"
             android:focusable="false"/>
 
