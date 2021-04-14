@@ -10,22 +10,25 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.geeks4ever.phishingnet.R;
+import com.geeks4ever.phishingnet.model.URLmodel;
 
 import java.util.ArrayList;
 
 public class URLListAdaptor extends RecyclerView.Adapter<URLListAdaptor.ViewHolder> {
 
     private ArrayList<String> list;
+    private ArrayList<URLmodel> UrlDetails;
     private Context context;
 
     public URLListAdaptor(Context context){
-        this.list = new ArrayList<>();
         this.context = context;
+        this.list = new ArrayList<>();
 
     }
 
-    public void updateList(ArrayList<String> list){
+    public void updateList(ArrayList<String> list, ArrayList<URLmodel> UrlDetails){
         this.list = list;
+        this.UrlDetails = UrlDetails;
         this.notifyDataSetChanged();
     }
 
@@ -40,7 +43,13 @@ public class URLListAdaptor extends RecyclerView.Adapter<URLListAdaptor.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.text.setText(list.get(position));
+        int pos = (list.size() -1) - position;
+//        Log.e("inflate item : ", String.valueOf(pos) + " "+list.get(pos));
+
+        holder.text.setText(UrlDetails.get(pos).url);
+        holder.text.setTextColor((UrlDetails.get(pos).status == URLmodel.BAD_URL)?
+                context.getResources().getColor(R.color.warning_red) :
+                context.getResources().getColor(R.color.tech_blue));
 
     }
 

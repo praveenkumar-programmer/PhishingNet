@@ -1,6 +1,6 @@
 package com.geeks4ever.phishingnet.model.repository;
 
-import android.app.Application;
+import android.content.Context;
 
 import androidx.collection.CircularArray;
 import androidx.lifecycle.LiveData;
@@ -30,9 +30,9 @@ public class CommonRepository {
     private final MutableLiveData<Boolean> FloatingWindowServiceOnOffSetting = new MutableLiveData<>();
     private final MutableLiveData<Boolean> darkMode = new MutableLiveData<>();
 
-    private CommonRepository(Application application){
+    private CommonRepository(Context context){
 
-        commonDAO = CommonDatabase.getInstance(application).commonDAO();
+        commonDAO = CommonDatabase.getInstance(context).commonDAO();
 
 
         LiveDataReactiveStreams.fromPublisher(commonDAO.getURLList()).observeForever(new Observer<List<URLDBModel>>() {
@@ -63,8 +63,12 @@ public class CommonRepository {
         LiveDataReactiveStreams.fromPublisher(commonDAO.getSetting("mainService")).observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
-                if(aBoolean != null)
+
+                if(aBoolean != null) {
+
                     mainServiceOnOffSetting.setValue(aBoolean);
+                    context.getSharedPreferences("mainService", 0).edit().putBoolean("mainService", aBoolean).commit();
+                }
             }
         });
 
@@ -87,10 +91,10 @@ public class CommonRepository {
 
     }
 
-    public static CommonRepository getInstance(Application application) {
+    public static CommonRepository getInstance(Context context) {
 
         if(repository == null)
-            repository = new CommonRepository(application);
+            repository = new CommonRepository(context);
         return repository;
     }
 

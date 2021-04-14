@@ -1,6 +1,8 @@
 package com.geeks4ever.phishingnet.view;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -17,6 +19,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.geeks4ever.phishingnet.R;
+import com.geeks4ever.phishingnet.services.QuickTileService;
 import com.geeks4ever.phishingnet.viewmodel.HomePageViewModel;
 import com.google.android.material.button.MaterialButton;
 
@@ -55,12 +58,17 @@ public class HomePage extends AppCompatActivity {
                     imageView.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.off_icon, null));
                     button.setText("enable");
                 }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    QuickTileService.requestListeningState(HomePage.this, new ComponentName(getApplication(), QuickTileService.class));
+                }
             }
         });
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 viewModel.toggleMainServiceOnOffSetting();
             }
         });

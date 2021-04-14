@@ -1,7 +1,6 @@
 package com.geeks4ever.phishingnet.viewmodel;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -54,7 +53,7 @@ public class HomePageViewModel extends AndroidViewModel{
 
 
     public void toggleMainServiceOnOffSetting() {
-        Log.e("viewModel onButton", "clicked");
+//        Log.e("viewModel onButton", "clicked");
         repository.toggleMainServiceOnOff();
     }
 

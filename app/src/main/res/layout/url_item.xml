@@ -7,7 +7,9 @@
         android:id="@+id/text_in_recycler_tem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="10dp"
+        android:background="@drawable/url_item_bg"
+        android:padding="5dp"
+        android:textSize="8sp"
         android:text="www.testingurl/howisthis?/golive"
         android:textColor="@color/warning_red"/>
 

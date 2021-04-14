@@ -3,7 +3,6 @@ package com.geeks4ever.phishingnet.services;
 import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -71,13 +70,17 @@ public class CheckerService extends Service {
         if (s.contains("instagram")) {
             s = instagramURLDecoder(s);
         }
+
         String finalS = s;
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                checkGoogleSafeBrowsing(finalS);
-            }
-        });
+        checkGoogleSafeBrowsing(finalS);
+//        Executors.newSingleThreadExecutor()
+//                .execute(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        checkGoogleSafeBrowsing(finalS);
+//                    }
+//                });
+
     }
 
     private String instagramURLDecoder(String url) {
@@ -95,6 +98,9 @@ public class CheckerService extends Service {
     private void checkGoogleSafeBrowsing(String urlToCheck) {
 
         try {
+
+//            Log.e("inside googlecheck : ", urlToCheck);
+
             final String urlToCheck2 = urlToCheck;
             JSONObject json = getJsonObject(urlToCheck);
             String url = "https://safebrowsing.googleapis.com/v4/threatMatches:find?key=AIzaSyDVhCTR3IWUfteUGVugMEepE235_50TlLY";
@@ -105,9 +111,12 @@ public class CheckerService extends Service {
                             // response
                             if (response.has("matches")) {
                                 repository.addURL(new URLmodel(URLmodel.BAD_URL, urlToCheck));
+//                                Log.e("googlecheck true : ", urlToCheck);
                             } else {
                                 //check with machine learning API
-                                machineLearningCheck(urlToCheck2);
+//                                Log.e("googlecheck false : ", urlToCheck);
+//                                machineLearningCheck(urlToCheck2);
+                                repository.addURL(new URLmodel(URLmodel.GOOD_URL, urlToCheck));
                             }
                         }
                     },
@@ -140,10 +149,15 @@ public class CheckerService extends Service {
     private void machineLearningCheck(String urlToCheck) {
         try {
             //url
+
+//            Log.e("inside ml : ", urlToCheck);
+
             final String urlToCheck2 = urlToCheck;
             JSONObject urlObject = new JSONObject();
             urlObject.put("url", urlToCheck);
-            String url = "https://phish-defender.herokuapp.com/api";
+//            String url = "https://phish-defender.herokuapp.com/api";
+            String url = "https://rpadml.herokuapp.com/api";
+
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, url, urlObject,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -153,10 +167,13 @@ public class CheckerService extends Service {
                                 try {
                                     int Result = response.getInt("prediction");
                                     if (Result == 1) {
+//                                        Log.e("ml true : ", urlToCheck);
                                         repository.addURL(new URLmodel(URLmodel.BAD_URL, urlToCheck));
                                     }
-                                    else
+                                    else{
+//                                        Log.e("ml false : ", urlToCheck);
                                         repository.addURL(new URLmodel(URLmodel.GOOD_URL, urlToCheck));
+                                    }
 
                                 } catch (JSONException jsx) {
                                     Log.e(TAG, jsx.toString());
@@ -209,7 +226,7 @@ public class CheckerService extends Service {
         //client
         JSONObject clientObject = new JSONObject();
         JSONObject clientJson = new JSONObject();
-        clientJson.put("clientId", "Phish_Defender");
+        clientJson.put("clientId", "RPADML");
         clientJson.put("clientVersion", "1.5.2");
         //clientObject.put("client", clientJson);
 

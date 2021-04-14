@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.geeks4ever.phishingnet.R;
+import com.geeks4ever.phishingnet.model.URLDBModel;
+import com.geeks4ever.phishingnet.model.URLmodel;
 import com.geeks4ever.phishingnet.model.repository.CommonRepository;
 import com.geeks4ever.phishingnet.view.adaptors.URLListAdaptor;
 
@@ -29,8 +31,10 @@ public class FloatingWindowService extends Service {
     private View mFloatingWarningView;
 
     CommonRepository repository;
-    ArrayList<String> URLList;
+    ArrayList<URLmodel> UrlDetails;
+    ArrayList<String> UrlList;
     URLListAdaptor adaptor;
+    LinearLayoutManager layoutManager;
 
     RecyclerView recyclerView;
     TextView urlText;
@@ -47,7 +51,8 @@ public class FloatingWindowService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        URLList = new ArrayList<>();
+        UrlDetails = new ArrayList<>();
+        UrlList = new ArrayList<>();
         repository = CommonRepository.getInstance(getApplication());
 
         //getting the widget layout from xml using layout inflater
@@ -92,6 +97,7 @@ public class FloatingWindowService extends Service {
         alwaysOnFloatingWindow = mFloatingView.findViewById(R.id.always_on_floating_window);
 
 
+        layoutManager = new LinearLayoutManager(this);
         adaptor = new URLListAdaptor(this);
         recyclerView.setHasFixedSize(false);
         recyclerView.setAdapter(adaptor);
@@ -128,17 +134,34 @@ public class FloatingWindowService extends Service {
             }
         });
 
+        repository.getURLList().observeForever(new Observer<List<URLDBModel>>() {
+            @Override
+            public void onChanged(List<URLDBModel> urldbModels) {
+//                Log.e("Url", urldbModels.get(0).URLList.getFirst().url + " = " + urldbModels.get(0).URLList.getFirst().status);
+
+                if(UrlDetails.size() > 5 && UrlList.size() > 5) {
+                    UrlDetails.remove(0);
+                    UrlList.remove(0);
+                }
+                UrlDetails.add(urldbModels.get(0).URLList.getFirst());
+                UrlList.add(urldbModels.get(0).URLList.getFirst().url);
+//
+//                recyclerView.setAdapter(null);
+//                recyclerView.setLayoutManager(null);
+//                recyclerView.setAdapter(adaptor);
+//                recyclerView.setLayoutManager(layoutManager);
+                adaptor.updateList(UrlList, UrlDetails);
+
+//                recyclerView.smoothScrollToPosition(UrlDetails.size());
+            }
+        });
+
         repository.getCurrentUrl().observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
                 if(strings != null && !strings.isEmpty() && !strings.get(0).isEmpty()){
 
-                    if(URLList.size() > 5)
-                        URLList.remove(0);
-                    URLList.add(strings.get(0));
 
-                    adaptor.updateList(URLList);
-                    recyclerView.smoothScrollToPosition(URLList.size());
 
 //                    if(urldbModels.get(0).URLList.getFirst().status == URLmodel.BAD_URL){
 //                        if(warningWindow.getVisibility() != View.VISIBLE)

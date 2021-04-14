@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import com.geeks4ever.phishingnet.model.repository.CommonRepository;
@@ -21,46 +20,34 @@ public class MyAccessibilityService extends AccessibilityService {
     volatile boolean isOn;
     volatile boolean isFloatingWindowOn;
 
-
-    private LiveData<List<String>> AppListLiveData;
-    private LiveData<Boolean> MainServiceOnOffSettingLiveData;
-    private LiveData<Boolean> FloatingServiceOnOffSettingLiveData;
-    private LiveData<List<String>> CurrentURLLiveData;
-
     @Override
     public void onCreate() {
         super.onCreate();
         repository = CommonRepository.getInstance(getApplication());
         AppList = new ArrayList<>();
 
-        AppListLiveData = repository.getAppList();
-
-        AppListLiveData.observeForever(new Observer<List<String>>() {
+        repository.getAppList().observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
                 AppList = strings;
             }
         });
 
-        MainServiceOnOffSettingLiveData = repository.getMainServiceOnOffSetting();
-
-        MainServiceOnOffSettingLiveData.observeForever(new Observer<Boolean>() {
+        repository.getMainServiceOnOffSetting().observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 isOn = aBoolean;
             }
         });
 
-        FloatingServiceOnOffSettingLiveData = repository.getFloatingWindowServiceOnOffSetting();
-        FloatingServiceOnOffSettingLiveData.observeForever(new Observer<Boolean>() {
+        repository.getFloatingWindowServiceOnOffSetting().observeForever(new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean aBoolean) {
                 isFloatingWindowOn = aBoolean;
             }
         });
 
-        CurrentURLLiveData = repository.getCurrentUrl();
-        CurrentURLLiveData.observeForever(new Observer<List<String>>() {
+        repository.getCurrentUrl().observeForever(new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
                 currentURL = strings.get(0);
@@ -96,7 +83,7 @@ public class MyAccessibilityService extends AccessibilityService {
         if(isFloatingWindowOn)
             startService(new Intent(getBaseContext(), FloatingWindowService.class));
 
-        if (AppList.contains(String.valueOf(source.getPackageName()))) {
+        if ( source != null && AppList.contains(String.valueOf(source.getPackageName()))) {
 
             if (source.getText() != null && source.getText().length() > 0) {
 
