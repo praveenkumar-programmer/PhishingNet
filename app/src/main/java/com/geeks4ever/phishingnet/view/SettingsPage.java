@@ -33,8 +33,10 @@ public class SettingsPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_page);
 
-        if(getSupportActionBar() != null)
+        if(getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Settings");
+        }
 
 
         darkModeToggle = findViewById(R.id.settings_page_dark_mode_toggle);

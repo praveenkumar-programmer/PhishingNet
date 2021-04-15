@@ -57,9 +57,10 @@ public class AppSelectionPage extends AppCompatActivity {
         nDialog.setIndeterminate(false);
         nDialog.setCancelable(false);
 
-
-        if(getSupportActionBar() != null)
+        if(getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setTitle("Select Apps");
+        }
 
         findViewById(R.id.app_selection_page_done_button).setOnClickListener(new View.OnClickListener() {
             @Override
