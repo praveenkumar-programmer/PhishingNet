@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:animateLayoutChanges="true"
+    android:id="@+id/floating_warning_window"
+    android:visibility="gone"
     android:theme="@style/Theme.PhishingNet">
 
     <FrameLayout
-        android:id="@+id/floating_warning_window"
         android:layout_width="340dp"
         android:layout_height="550dp"
         android:layout_gravity="center">
@@ -56,7 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Phising Site Detected!"
+                android:text="Phishing Site Detected!"
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginTop="16dp"/>

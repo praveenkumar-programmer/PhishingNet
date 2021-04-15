@@ -20,6 +20,7 @@ import com.geeks4ever.phishingnet.model.URLDBModel;
 import com.geeks4ever.phishingnet.model.URLmodel;
 import com.geeks4ever.phishingnet.model.repository.CommonRepository;
 import com.geeks4ever.phishingnet.view.adaptors.URLListAdaptor;
+import com.google.android.material.button.MaterialButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,8 +40,10 @@ public class FloatingWindowService extends Service {
     RecyclerView recyclerView;
     TextView urlText;
     FrameLayout warningWindow, alwaysOnFloatingWindow;
+    MaterialButton closeButton;
 
     volatile boolean isMainServiceOn = false;
+    String currentUrl = "";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -89,12 +92,23 @@ public class FloatingWindowService extends Service {
         //getting windows services and adding the floating view to it
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mWindowManager.addView(mFloatingView, nonTouchableParams);
-        //mWindowManager.addView(mFloatingWarningView, touchableParams);
+        mWindowManager.addView(mFloatingWarningView, touchableParams);
 
         recyclerView = mFloatingView.findViewById(R.id.floating_recycler_view);
-        warningWindow = mFloatingWarningView.findViewById(R.id.floating_warning_window);
-        urlText = mFloatingWarningView.findViewById(R.id.warning_page_url_text);
         alwaysOnFloatingWindow = mFloatingView.findViewById(R.id.always_on_floating_window);
+
+
+        warningWindow = mFloatingWarningView.findViewById(R.id.floating_warning_window);
+        closeButton = mFloatingWarningView.findViewById(R.id.warning_page_close_button);
+        urlText = mFloatingWarningView.findViewById(R.id.warning_page_url_text);
+
+        closeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(warningWindow.getVisibility() == View.VISIBLE)
+                    warningWindow.setVisibility(View.GONE);
+            }
+        });
 
 
         layoutManager = new LinearLayoutManager(this);
@@ -137,7 +151,6 @@ public class FloatingWindowService extends Service {
         repository.getURLList().observeForever(new Observer<List<URLDBModel>>() {
             @Override
             public void onChanged(List<URLDBModel> urldbModels) {
-//                Log.e("Url", urldbModels.get(0).URLList.getFirst().url + " = " + urldbModels.get(0).URLList.getFirst().status);
 
                 if(UrlDetails.size() > 5 && UrlList.size() > 5) {
                     UrlDetails.remove(0);
@@ -145,31 +158,21 @@ public class FloatingWindowService extends Service {
                 }
                 UrlDetails.add(urldbModels.get(0).URLList.getFirst());
                 UrlList.add(urldbModels.get(0).URLList.getFirst().url);
-//
-//                recyclerView.setAdapter(null);
-//                recyclerView.setLayoutManager(null);
-//                recyclerView.setAdapter(adaptor);
-//                recyclerView.setLayoutManager(layoutManager);
+
                 adaptor.updateList(UrlList, UrlDetails);
 
-//                recyclerView.smoothScrollToPosition(UrlDetails.size());
-            }
-        });
+                if(!currentUrl.equals(urldbModels.get(0).URLList.getFirst().url)){
 
-        repository.getCurrentUrl().observeForever(new Observer<List<String>>() {
-            @Override
-            public void onChanged(List<String> strings) {
-                if(strings != null && !strings.isEmpty() && !strings.get(0).isEmpty()){
+                    currentUrl = urldbModels.get(0).URLList.getFirst().url;
+                    if(urldbModels.get(0).URLList.getFirst().status == URLmodel.BAD_URL){
 
-
-
-//                    if(urldbModels.get(0).URLList.getFirst().status == URLmodel.BAD_URL){
-//                        if(warningWindow.getVisibility() != View.VISIBLE)
-//                            warningWindow.setVisibility(View.VISIBLE);
-//                        urlText.setText(urldbModels.get(0).URLList.getFirst().url);
-//                    }
+                        if(warningWindow.getVisibility() != View.VISIBLE)
+                            warningWindow.setVisibility(View.VISIBLE);
+                        urlText.setText(currentUrl);
+                    }
 
                 }
+
             }
         });
 
