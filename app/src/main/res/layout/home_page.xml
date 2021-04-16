@@ -16,14 +16,14 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:src="@drawable/logo"
         android:layout_gravity="center_horizontal"/>
 
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_weight="0.4"
+        android:layout_weight="0.45"
         android:layout_gravity="center"
         android:src="@drawable/logo_text"/>
 

@@ -13,6 +13,9 @@
     <color name="tech_blue">#18FFFF</color>
     <color name="warning_red">#EF5350</color>
 
+    <color name="good_item_color">#A7FFEB</color>
+    <color name="bad_item_color">#FFCDD2</color>
+
     <color name="bg">#ECEFF1</color>
 
     <color name="mild_teal"></color>
