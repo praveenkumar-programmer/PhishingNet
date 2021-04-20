@@ -71,7 +71,13 @@ public class MyAccessibilityService extends AccessibilityService {
         if (source == null)
             return;
 
-        checkUrlsFromViews(source);
+        if (AccessibilityEvent
+                .eventTypeToString(accessibilityEvent.getEventType())
+                .contains("TYPE_WINDOW_CONTENT_CHANGED")){
+
+            checkUrlsFromViews(source);
+        }
+
 
     }
 
@@ -95,17 +101,18 @@ public class MyAccessibilityService extends AccessibilityService {
                         repository.setCurrentUrl(capturedText);
 
                     }
-
-                for (int i = 0; i < source.getChildCount(); i++) {
-                    AccessibilityNodeInfo child = source.getChild(i);
-                    checkUrlsFromViews(child);
-                    if (child != null) {
-                        child.recycle();
-                    }
-                }
-
             }
+
+            for (int i = 0; i < source.getChildCount(); i++) {
+                AccessibilityNodeInfo child = source.getChild(i);
+                checkUrlsFromViews(child);
+                if (child != null) {
+                    child.recycle();
+                }
+            }
+
         }
+
 
     }
 
