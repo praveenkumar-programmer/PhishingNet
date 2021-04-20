@@ -41,10 +41,8 @@ public class LogListAdaptor extends RecyclerView.Adapter<LogListAdaptor.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        int pos = (UrlDetails.size() -1) - position;
-
-        holder.text.setText(UrlDetails.get(pos).url);
-        holder.text.setBackground((UrlDetails.get(pos).status == URLmodel.BAD_URL)?
+        holder.text.setText(UrlDetails.get(position).url);
+        holder.text.setBackground((UrlDetails.get(position).status == URLmodel.BAD_URL)?
                 ResourcesCompat.getDrawable(context.getResources(), R.drawable.bad_log_item_bg, null) :
                 ResourcesCompat.getDrawable(context.getResources(), R.drawable.good_log_item_bg, null) );
 
