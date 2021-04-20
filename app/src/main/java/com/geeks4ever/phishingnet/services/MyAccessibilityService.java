@@ -86,8 +86,7 @@ public class MyAccessibilityService extends AccessibilityService {
     private void checkUrlsFromViews(AccessibilityNodeInfo source) {
 
         startService(new Intent(this, CheckerService.class));
-        if(isFloatingWindowOn)
-            startService(new Intent(getBaseContext(), FloatingWindowService.class));
+        startService(new Intent(this, FloatingWindowService.class));
 
         if ( source != null && AppList.contains(String.valueOf(source.getPackageName()))) {
 

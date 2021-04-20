@@ -132,8 +132,10 @@ public class FloatingWindowService extends Service {
                 isMainServiceOn = aBoolean;
                 if(aBoolean)
                     alwaysOnFloatingWindow.setAlpha(0.5f);
-                else
+                else{
                     alwaysOnFloatingWindow.setAlpha(0.0f);
+                    stopSelf();
+                }
             }
         });
 
@@ -141,8 +143,12 @@ public class FloatingWindowService extends Service {
             @Override
             public void onChanged(Boolean aBoolean) {
 
-                if(isMainServiceOn && aBoolean)
-                            alwaysOnFloatingWindow.setAlpha(0.5f);
+                if(isMainServiceOn) {
+                    if (aBoolean)
+                        alwaysOnFloatingWindow.setAlpha(0.5f);
+                    else
+                        alwaysOnFloatingWindow.setAlpha(0.0f);
+                }
                 else
                     stopSelf();
             }
