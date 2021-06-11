@@ -34,11 +34,12 @@
 <br>
 
 <p align="center">
-<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 0.png?raw=true" alt="screenshot 1">
-<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 1.png?raw=true" alt="screenshot 2">
-<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 2.png?raw=true" alt="screenshot 3">
-<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 3.png?raw=true" alt="screenshot 4">
-<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 4.png?raw=true" alt="screenshot 5">
+<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 0.png?raw=true" alt="screenshot 1" width="200">
+<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 1.png?raw=true" alt="screenshot 2" width="200">
+<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 2.png?raw=true" alt="screenshot 3" width="200">
+<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 3.png?raw=true" alt="screenshot 4" width="200">
+<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 4.png?raw=true" alt="screenshot 5" width="200">
+<img src="https://github.com/praveenkumar-programmer/PhishingNet/blob/master/screenshot 5.png?raw=true" alt="screenshot 6" width="200">
 </p>
 
 <br>
